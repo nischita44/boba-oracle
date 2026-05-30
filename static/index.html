@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>🧋 Boba Oracle</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #fff1f5 0, transparent 35%),
+        radial-gradient(circle at bottom right, #ede2ff 0, transparent 35%),
+        linear-gradient(135deg, #fde2e4 0%, #e2c9f5 100%);
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #3c2748;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 980px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 32px;
+      padding: 34px;
+      box-shadow: 0 28px 80px rgba(90, 52, 112, 0.18);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .oracle-icon {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 14px;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .mini-cup {
+      width: 76px;
+      height: 92px;
+      background: linear-gradient(to bottom, #e6b37a, #c98254);
+      border-radius: 14px 14px 26px 26px;
+      margin: auto;
+      position: relative;
+      border: 4px solid rgba(255,255,255,0.8);
+      box-shadow: 0 14px 24px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+
+    .mini-cup::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 80px;
+      background: #3d253f;
+      border-radius: 999px;
+      right: 14px;
+      top: -24px;
+      transform: rotate(10deg);
+    }
+
+    .mini-cup::after {
+      content: "● ● ● ● ●";
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      right: 8px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: #2b1b2f;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      color: #4d2b63;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #75627e;
+      font-size: 1rem;
+      line-height: 1.5;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .input-panel {
+      background: #fffafd;
+      border: 1px solid #f2ddec;
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .quick-vibes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+
+    .vibe-btn {
+      border: 1px solid #ead0ef;
+      background: #ffffff;
+      color: #6d3f86;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .vibe-btn:hover {
+      background: #f7e9fb;
+      transform: translateY(-1px);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .field {
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      font-weight: 800;
+      color: #5a3470;
+      margin-bottom: 8px;
+      font-size: 0.92rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 94px;
+      resize: none;
+      border: 2px solid #f0e0ec;
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      background: #ffffff;
+      transition: 0.2s;
+      color: #3c2748;
+    }
+
+    textarea:focus {
+      border-color: #c89bd7;
+      box-shadow: 0 0 0 4px rgba(200, 155, 215, 0.18);
+    }
+
+    .main-btn {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #a96ac9 0%, #e08fa5 100%);
+      color: white;
+      border: none;
+      padding: 16px 28px;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 18px;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.15s;
+      box-shadow: 0 14px 28px rgba(184, 127, 209, 0.28);
+    }
+
+    .main-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .main-btn:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .loading-box {
+      display: none;
+      margin-top: 20px;
+      background: #fff4fb;
+      border: 1px solid #efd4eb;
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      color: #6d3f86;
+      font-weight: 800;
+    }
+
+    .loading-box.show {
+      display: block;
+    }
+
+    .loading-dots span {
+      animation: blink 1s infinite;
+      font-size: 1.4rem;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .error {
+      margin-top: 18px;
+      background: #fff0f0;
+      color: #a33;
+      padding: 14px;
+      border-radius: 16px;
+      display: none;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    .result {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .section-title {
+      text-align: center;
+      color: #4d2b63;
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+    }
+
+    .cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+    .card {
+      background: #fffafd;
+      border: 1px solid #f2ddec;
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: 0 12px 34px rgba(90, 52, 112, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 100px;
+      height: 100px;
+      background: rgba(232, 180, 238, 0.25);
+      border-radius: 50%;
+    }
+
+    .vibe-label {
+      align-self: flex-start;
+      background: #f4e4f7;
+      color: #6d3f86;
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      position: relative;
+      z-index: 1;
+    }
+
+    .boba-wrap {
+      height: 170px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .boba-cup {
+      width: 108px;
+      height: 142px;
+      border-radius: 18px 18px 34px 34px;
+      position: relative;
+      border: 4px solid rgba(255,255,255,0.9);
+      box-shadow: 0 18px 28px rgba(0,0,0,0.14);
+      overflow: hidden;
+      animation: wiggle 3s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-2deg); }
+    }
+
+    .boba-cup::before {
+      content: "";
+      position: absolute;
+      width: 18px;
+      height: 130px;
+      background: #3b2541;
+      border-radius: 999px;
+      right: 20px;
+      top: -38px;
+      transform: rotate(10deg);
+      z-index: 3;
+    }
+
+    .lid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 24px;
+      background: rgba(255,255,255,0.5);
+      z-index: 2;
+    }
+
+    .foam {
+      position: absolute;
+      top: 24px;
+      left: 0;
+      right: 0;
+      height: 26px;
+      background: rgba(255,255,255,0.65);
+      border-radius: 0 0 50% 50%;
+      z-index: 2;
+    }
+
+    .pearls {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      height: 42px;
+      z-index: 3;
+    }
+
+    .pearl {
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      background: #27162c;
+      border-radius: 50%;
+      box-shadow: inset -2px -2px 2px rgba(255,255,255,0.12);
+    }
+
+    .p1 { left: 4px; bottom: 2px; }
+    .p2 { left: 24px; bottom: 14px; }
+    .p3 { left: 44px; bottom: 4px; }
+    .p4 { left: 64px; bottom: 16px; }
+    .p5 { left: 78px; bottom: 1px; }
+    .p6 { left: 16px; bottom: 28px; }
+    .p7 { left: 55px; bottom: 30px; }
+
+    .brown-lines {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(115deg, transparent 10%, rgba(128,64,28,0.45) 16%, transparent 24%),
+        linear-gradient(75deg, transparent 40%, rgba(128,64,28,0.4) 48%, transparent 58%);
+    }
+
+    .boba-cup.milk_tea {
+      background: linear-gradient(to bottom, #e7bb83, #c98a5c);
+    }
+
+    .boba-cup.fruit_tea {
+      background: linear-gradient(to bottom, #ff9b72, #f35f7e);
+    }
+
+    .boba-cup.matcha {
+      background: linear-gradient(to bottom, #b9d78a, #6ba45d);
+    }
+
+    .boba-cup.taro {
+      background: linear-gradient(to bottom, #d7a6ee, #9f66c7);
+    }
+
+    .boba-cup.brown_sugar {
+      background: linear-gradient(to bottom, #f0c88f, #b87442);
+    }
+
+    .boba-cup.brown_sugar .brown-lines {
+      display: block;
+    }
+
+    .boba-cup.cheese_foam {
+      background: linear-gradient(to bottom, #f3c286, #d08b5d);
+    }
+
+    .boba-cup.cheese_foam .foam {
+      height: 38px;
+      background: #fff3d5;
+    }
+
+    .drink-name {
+      font-size: 1.08rem;
+      font-weight: 900;
+      color: #4d2b63;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .why {
+      color: #66526e;
+      line-height: 1.45;
+      font-size: 0.92rem;
+      font-style: italic;
+      position: relative;
+      z-index: 1;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 0.9rem;
+      color: #4c3d52;
+      position: relative;
+      z-index: 1;
+    }
+
+    .details strong {
+      color: #7a4a8f;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .chip {
+      background: #f4e4f7;
+      color: #6d3f86;
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+
+    .order-box {
+      background: #faf0f5;
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: #60406f;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tips {
+      background: #fff6fb;
+      border-radius: 16px;
+      padding: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tips-title {
+      font-size: 0.86rem;
+      color: #7a4a8f;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .tips ul {
+      padding-left: 18px;
+      color: #5e4e65;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+
+    .copy-btn {
+      border: none;
+      background: #6d3f86;
+      color: white;
+      padding: 11px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 800;
+      margin-top: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .copy-btn:hover {
+      background: #58316f;
+    }
+
+    .affirmation {
+      margin-top: 22px;
+      background: linear-gradient(135deg, #fff0f6, #f3e8ff);
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      font-weight: 900;
+      color: #7a4a8f;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 650px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 2.1rem;
+      }
+
+      body {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="oracle-icon">
+        <div class="mini-cup"></div>
+      </div>
+
+      <h1>🧋 Boba Oracle</h1>
+
+      <p class="subtitle">
+        Tell the Oracle your mood and the weather. It will shake up three cute boba orders with toppings, sweetness, ice, and exactly how to order.
+      </p>
+    </div>
+
+    <div class="input-panel">
+      <div class="quick-vibes">
+        <button class="vibe-btn" onclick="addMood('tired and need comfort')">🥱 Tired</button>
+        <button class="vibe-btn" onclick="addMood('stressed and overwhelmed')">😵‍💫 Stressed</button>
+        <button class="vibe-btn" onclick="addMood('happy and playful')">🥰 Happy</button>
+        <button class="vibe-btn" onclick="addMood('focused and studying')">📚 Study Mode</button>
+        <button class="vibe-btn" onclick="addWeather('rainy and cold')">🌧 Rainy</button>
+        <button class="vibe-btn" onclick="addWeather('sunny and hot')">☀️ Sunny</button>
+      </div>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="mood">How are you feeling?</label>
+          <textarea id="mood" placeholder="ugh today was so long..."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="weather">What is the weather like?</label>
+          <textarea id="weather" placeholder="rainy and cold, sunny and hot, cloudy..."></textarea>
+        </div>
+      </div>
+
+      <button class="main-btn" id="askBtn" onclick="askOracle()">
+        Reveal my boba picks ✨
+      </button>
+    </div>
+
+    <div id="loading" class="loading-box">
+      <div id="loadingText">🔮 Reading your mood...</div>
+      <div class="loading-dots">
+        <span>•</span><span>•</span><span>•</span>
+      </div>
+    </div>
+
+    <div id="error" class="error"></div>
+
+    <div id="result" class="result">
+      <h2 class="section-title">Your Oracle Recommendations</h2>
+      <div id="cards" class="cards"></div>
+      <div id="affirmation" class="affirmation"></div>
+    </div>
+
+  </div>
+
+  <script>
+    const loadingSteps = [
+      "🔮 Reading your mood...",
+      "☁️ Checking the weather...",
+      "🧋 Shaking your drink...",
+      "✨ Adding toppings...",
+      "📜 Writing your order..."
+    ];
+
+    let loadingInterval;
+
+    function addMood(text) {
+      document.getElementById("mood").value = text;
+    }
+
+    function addWeather(text) {
+      document.getElementById("weather").value = text;
+    }
+
+    function startLoading() {
+      const loading = document.getElementById("loading");
+      const loadingText = document.getElementById("loadingText");
+
+      let index = 0;
+      loadingText.textContent = loadingSteps[index];
+      loading.classList.add("show");
+
+      loadingInterval = setInterval(() => {
+        index = (index + 1) % loadingSteps.length;
+        loadingText.textContent = loadingSteps[index];
+      }, 900);
+    }
+
+    function stopLoading() {
+      clearInterval(loadingInterval);
+      document.getElementById("loading").classList.remove("show");
+    }
+
+    function createBobaCup(drinkType) {
+      return `
+        <div class="boba-wrap">
+          <div class="boba-cup ${drinkType}">
+            <div class="brown-lines"></div>
+            <div class="lid"></div>
+            <div class="foam"></div>
+            <div class="pearls">
+              <span class="pearl p1"></span>
+              <span class="pearl p2"></span>
+              <span class="pearl p3"></span>
+              <span class="pearl p4"></span>
+              <span class="pearl p5"></span>
+              <span class="pearl p6"></span>
+              <span class="pearl p7"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function copyOrder(orderText, button) {
+      navigator.clipboard.writeText(orderText)
+        .then(() => {
+          const original = button.textContent;
+          button.textContent = "Copied ✨";
+          setTimeout(() => {
+            button.textContent = original;
+          }, 1200);
+        })
+        .catch(() => {
+          alert("Could not copy. You can manually copy the order.");
+        });
+    }
+
+    async function askOracle() {
+      const mood = document.getElementById("mood").value.trim();
+      const weather = document.getElementById("weather").value.trim();
+
+      if (!mood) {
+        alert("Tell the Oracle how you're feeling first 🧋");
+        return;
+      }
+
+      if (!weather) {
+        alert("Tell the Oracle the weather too ☁️");
+        return;
+      }
+
+      const btn = document.getElementById("askBtn");
+      const result = document.getElementById("result");
+      const cards = document.getElementById("cards");
+      const affirmation = document.getElementById("affirmation");
+      const error = document.getElementById("error");
+
+      btn.disabled = true;
+      btn.textContent = "Consulting the Oracle...";
+      error.classList.remove("show");
+      result.classList.remove("show");
+      cards.innerHTML = "";
+
+      startLoading();
+
+      try {
+        const res = await fetch(
+          `/oracle?mood=${encodeURIComponent(mood)}&weather=${encodeURIComponent(weather)}`
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+
+        data.recommendations.forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "card";
+
+          const toppings = item.toppings
+            .map((topping) => `<span class="chip">${topping}</span>`)
+            .join("");
+
+          const tips = item.customizeTips
+            .map((tip) => `<li>${tip}</li>`)
+            .join("");
+
+          card.innerHTML = `
+            <div class="vibe-label">✨ ${item.vibe}</div>
+
+            ${createBobaCup(item.drinkType)}
+
+            <div class="drink-name">🧋 ${item.drink}</div>
+
+            <div class="why">${item.why}</div>
+
+            <div class="details">
+              <div><strong>Sweetness:</strong> ${item.sweetness}</div>
+              <div><strong>Ice:</strong> ${item.ice}</div>
+              <div><strong>Toppings to add:</strong></div>
+              <div class="chips">${toppings}</div>
+            </div>
+
+            <div class="order-box">
+              <strong>How to order:</strong><br />
+              ${item.orderInstructions}
+            </div>
+
+            <div class="tips">
+              <div class="tips-title">Customize this drink</div>
+              <ul>${tips}</ul>
+            </div>
+
+            <button class="copy-btn">Copy order</button>
+          `;
+
+          const copyButton = card.querySelector(".copy-btn");
+          copyButton.addEventListener("click", () => {
+            copyOrder(item.orderInstructions, copyButton);
+          });
+
+          cards.appendChild(card);
+        });
+
+        affirmation.textContent = "✨ " + data.affirmation;
+        result.classList.add("show");
+
+      } catch (err) {
+        error.textContent = "Oracle is napping. Try again in a moment.";
+        error.classList.add("show");
+      } finally {
+        stopLoading();
+        btn.disabled = false;
+        btn.textContent = "Reveal my boba picks ✨";
+      }
+    }
+  </script>
+</body>
+</html>
