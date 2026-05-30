@@ -61,6 +61,7 @@ python -m uvicorn main:app --reload
 Open [http://127.0.0.1:8000](http://127.0.0.1:8000) and consult the Oracle. 🧋
 
 ## 📁 Project structure
+
 boba-oracle/
 ├── main.py              # FastAPI app + Claude integration
 ├── static/
@@ -81,4 +82,4 @@ Do whatever you want with it. Make a CoffeeGenie. A Pizza Genie. The world is yo
 
 ---
 
-Made with 🧋 by ([https://linkedin.com/in/nischitha](https://www.linkedin.com/in/nischitha-sadananda/))
+Made with 🧋 by ([LinkedIn](https://www.linkedin.com/in/nischitha-sadananda/))
