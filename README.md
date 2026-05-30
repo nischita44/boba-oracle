@@ -1,5 +1,10 @@
 # 🧋 AI BobaGenie
 
+<img width="1250" height="735" alt="Screenshot 2026-05-30 at 4 25 57 PM" src="https://github.com/user-attachments/assets/2fb526f0-73ea-4acd-aa1f-95f19ccdaf4f" />
+
+<img width="1417" height="808" alt="Screenshot 2026-05-30 at 4 37 02 PM" src="https://github.com/user-attachments/assets/9381207b-1ff7-499d-96ef-d8372b3fa14d" />
+
+
 Tell the AI BobaGenie how you're feeling. It picks your boba.
 
 A tiny AI-powered web app that recommends boba drinks based on your mood and the weather — complete with sweetness, ice level, toppings, and exactly how to order at the shop.
