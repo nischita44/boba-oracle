@@ -4,7 +4,7 @@ Tell the Oracle how you're feeling. It picks your boba.
 
 A tiny AI-powered web app that recommends boba drinks based on your mood and the weather — complete with sweetness, ice level, toppings, and exactly how to order at the shop.
 
-**🔗 Live: [[URL](https://boba-oracle.onrender.com/)]**
+**🔗 Live: [[AI BobaGenieURL](https://boba-oracle.onrender.com/)]**
 
 ---
 
